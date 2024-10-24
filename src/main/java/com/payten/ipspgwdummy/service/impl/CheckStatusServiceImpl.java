@@ -4,15 +4,25 @@ import main.java.com.payten.ipspgwdummy.model.CTStatus;
 import main.java.com.payten.ipspgwdummy.model.CheckStatus;
 import main.java.com.payten.ipspgwdummy.service.CheckStatusService;
 import org.apache.log4j.Logger;
+import org.jpos.core.Configurable;
+import org.jpos.core.Configuration;
+import org.jpos.core.ConfigurationException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CheckStatusServiceImpl implements CheckStatusService {
+public class CheckStatusServiceImpl implements CheckStatusService, Configurable {
 
     private static final Logger LOGGER = Logger.getLogger(CheckStatusServiceImpl.class);
-    private static final String SUCCESS_STATUS = "00";
-    private static final String REJECTED_STATUS = "05";
-    private static final String TIMEOUT_STATUS = "82";
+    private  String successStatus = null;
+    private  String rejectedStatus = null;
+    private  String timeoutStatus = null;
+
+    @Override
+    public void setConfiguration(Configuration configuration) throws ConfigurationException {
+        successStatus = configuration.get("statusCreditTransferApproved", "00");
+        rejectedStatus = configuration.get("statusCreditTransferRejected", "05");
+        timeoutStatus = configuration.get("statusCreditTransferUnknown", "82");
+    }
 
 
     @Override
@@ -46,7 +56,7 @@ public class CheckStatusServiceImpl implements CheckStatusService {
             if(alreadyAttempted == 1){
                 LOGGER.info(attemptCountLog);
                 Thread.sleep(60000);
-                ctStatus.setStatusCode(REJECTED_STATUS);
+                ctStatus.setStatusCode(rejectedStatus);
                 return ctStatus;
             }else if(alreadyAttempted == 2){
                 LOGGER.info(attemptCountLog);
@@ -59,7 +69,7 @@ public class CheckStatusServiceImpl implements CheckStatusService {
             if(alreadyAttempted == 1 || alreadyAttempted == 2){
                 LOGGER.info(attemptCountLog);
                 Thread.sleep(60000);
-                ctStatus.setStatusCode(REJECTED_STATUS);
+                ctStatus.setStatusCode(rejectedStatus);
                 return ctStatus;
             }else if(alreadyAttempted == 3){
                 LOGGER.info(attemptCountLog);
@@ -75,11 +85,13 @@ public class CheckStatusServiceImpl implements CheckStatusService {
 
     private String generateFinalStatus(char firstNumber) {
         if (firstNumber == '1') {
-            return SUCCESS_STATUS;
+            return successStatus;
         } else if (firstNumber == '2') {
-            return REJECTED_STATUS;
+            return rejectedStatus;
         } else {
-            return TIMEOUT_STATUS;
+            return timeoutStatus;
         }
     }
+
+
 }

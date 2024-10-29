@@ -13,7 +13,9 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
@@ -77,7 +79,9 @@ public class IPServices implements Configurable {
 
         try {
             String[] args = {};
+
             SpringApplication.run(IPServices.class, args);
+            logger.info("SpringApplication started ...");
         } catch (Exception e) {
             System.out.println("Exception while starting... : " + e.getMessage());
             logger.error("Exception while starting... " + e.getMessage());

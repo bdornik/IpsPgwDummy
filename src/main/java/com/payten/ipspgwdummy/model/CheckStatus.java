@@ -8,6 +8,16 @@ public class CheckStatus {
     private String stan;
 
 
+    public CheckStatus(String creditTransferIdentificator, String terminalIdentificator, String creditTransferAmount, String stan) {
+        this.creditTransferIdentificator = creditTransferIdentificator;
+        this.terminalIdentificator = terminalIdentificator;
+        this.creditTransferAmount = creditTransferAmount;
+        this.stan = stan;
+    }
+
+    public CheckStatus() {
+    }
+
     public String getCreditTransferIdentificator() {
         return creditTransferIdentificator;
     }

@@ -5,7 +5,15 @@ public class SessionToken {
 	    private String sessionToken;
 	    private String tokenExpiriyTime;
 
-	    public String getSessionToken() {
+	public SessionToken() {
+	}
+
+	public SessionToken(String sessionToken, String tokenExpiriyTime) {
+		this.sessionToken = sessionToken;
+		this.tokenExpiriyTime = tokenExpiriyTime;
+	}
+
+	public String getSessionToken() {
 	        return sessionToken;
 	    }
 
